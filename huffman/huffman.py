@@ -6,7 +6,7 @@ from .node import Node
 
 def huffman(input_huffman):
 
-    item_queue = [Node(a, len(list(b))) for a,b in groupby(sorted(input_huffman))]
+    item_queue = [Node(a, len(list(b))) for a, b in groupby(sorted(input_huffman))]
     heapify(item_queue)
 
     while len(item_queue) > 1:
