@@ -95,17 +95,17 @@ class NeuralNetwork:
             outputs = []
             for neuron in layer.neurons:
                 tot = neuron.sum(inputs) + neuron.weights[-1]*BIAS
-                outputs.append(sigmoid(tot))
+                outputs.append(self.sigmoid(tot))
             inputs = outputs
         return outputs
 
+    @staticmethod
+    def sigmoid(activation, response=1):
+        # the activation function
+        try:
+            return 1/(1+math.e**(-activation/response))
+        except OverflowError:
+            return float("inf")
+
     def __str__(self):
         return '\n'.join([str(i+1)+' '+str(layer) for i, layer in enumerate(self.layers)])
-
-
-def sigmoid(activation, response=1):
-    # the activation function
-    try:
-        return 1/(1+math.e**(-activation/response))
-    except OverflowError:
-        return float("inf")

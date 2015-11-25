@@ -16,7 +16,7 @@ class Node(object):
         self.right = rn
 
     def __repr__(self):
-        return "%s - %s — %s _ %s" % (self.item, self.weight, self.left, self.right)
+        return "%s - %s - %s _ %s" % (self.item, self.weight, self.left, self.right)
 
     def __lt__(self, other):
         return lt(self.weight, other.weight)
