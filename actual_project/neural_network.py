@@ -1,5 +1,7 @@
 import re
 import numpy as np
+import skipgram
+import cbow
 
 
 def make_vocabulary(path_to_file, num_words=0):
@@ -21,3 +23,31 @@ def make_vocabulary(path_to_file, num_words=0):
         list_nums[i] = unique_words.index(list_words[i])
 
     return list_nums
+
+
+def train_model(num_iters, path_to_file, eta=0.005, vecsize=10, context=3, model="skipgram", num_words=0):
+    data = make_vocabulary(path_to_file, num_words)
+    V = max(data)
+    Win = np.random.rand(V, vecsize)
+    Wout = np.random.rand(vecsize, V)
+
+    for i in range(context, num_iters-context):
+        if model == "skipgram":
+            inword = data[i]
+            outwords = np.append(data[i-context:i],data[i+1:i+context+1])
+            Win, Wout = skipgram.updateweights(eta,Win,Wout,inword,outwords)
+
+        elif model == "skipgram_negative":
+            inword = data[i]
+            outwords = np.append(data[i-context:i],data[i+1:i+context+1])
+            Win,Wout = skipgram.updateweights_negative(eta,Win,Wout,inword,outwords)
+
+        elif model == "cbow":
+            inword = np.append(data[i-context:i],data[i+1:i+context+1])
+            outwords = data[i]
+            Win,Wout = cbow.updateweights(eta,Win,Wout,inword,outwords)
+
+        elif model == "cbow_negative":
+            inword = np.append(data[i-context:i],data[i+1:i+context+1])
+            outwords = data[i]
+            Win,Wout = cbow.updateweights_negative(eta,Win,Wout,inword,outwords)
