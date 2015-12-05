@@ -5,13 +5,15 @@ def updateweights(eta, Win, Wout, inwords, outword):
 
     V = np.size(Win, 0)
     C = len(inwords)
-    N = np.size(Win, 0)
+    N = np.size(Win, 1)
 
     h = np.zeros(N)
     for i in range(C):
         h += Win[inwords[i]]
 
-    h = (1/C*h).T
+    h = (1.0/C*h).T
+    #alternative:
+    #h = np.dot(1.0/C,h).T
     softmax = 0
     for j in range(V):
         softmax += np.exp(np.dot(Wout[:, j].T, h))
@@ -31,21 +33,30 @@ def updateweights(eta, Win, Wout, inwords, outword):
 
 
 def updateweights_negative(eta, Win, Wout, inwords, outword):
+    #some notes on the input
+    #eta is scalar
+    #Win is a numpy array of V by N
+    #Wout is a numpy array of N by V
+    #inwords is a list (NOT numpy) of ints
+    #outword is an int
 
     # TODO: variable V and N are the same, something isn't right
+    #resolution: gave N correct index
     V = np.size(Win, 0)
     C = len(inwords)
-    N = np.size(Win, 0)
+    N = np.size(Win, 1)
 
     h = np.zeros(N)
     for i in range(C):
         h += Win[inwords[i]]
 
     # TODO: error on T. it says h is an int
-    h = (1/C*h).T
+    #works here after changing 1 to 1.0
+    h = (1.0/C*h).T
     softmax = 0
     for j in range(V):
-        softmax += np.exp(np.dot(Wout[:, j].T, h))
+        temp = Wout[:,j].T
+        softmax += np.exp(np.dot(temp, h))
 
     EH = np.zeros(N)
     for i in range(N):
