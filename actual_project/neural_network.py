@@ -25,13 +25,13 @@ def make_vocabulary(path_to_file, num_words=0):
     return list_nums
 
 
-def train_model(num_iters, path_to_file, eta=0.005, vecsize=10, context=3, model="skipgram", num_words=0):
+def train_model(num_iterations, path_to_file, eta=0.005, vec_size=10, context=3, model="skipgram", num_words=0):
     data = make_vocabulary(path_to_file, num_words)
     V = max(data)
-    Win = np.random.rand(V, vecsize)
-    Wout = np.random.rand(vecsize, V)
+    Win = np.random.rand(V, vec_size)
+    Wout = np.random.rand(vec_size, V)
 
-    for i in range(context, num_iters-context):
+    for i in range(context, num_iterations-context):
         if model == "skipgram":
             inword = data[i]
             outwords = np.append(data[i-context:i],data[i+1:i+context+1])
